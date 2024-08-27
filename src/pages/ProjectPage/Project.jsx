@@ -15,8 +15,6 @@ const Project = ()=>  {
         const response = await axios.get('https://dmu-dasom.or.kr:8090/board/project');
         if (response.data.success) {
           setProjects(response.data.data);
-          console.log("회원이 보는 프로젝트 페이지 == > 프로젝트 리스트 받아오기 성공")
-          console.log(response)
         }
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -34,7 +32,7 @@ const Project = ()=>  {
           {projects.map((project, index) => (
             <Link to={`/ProjectInfo/${project.projectNo}`} key={index} className="project-link">
               <div className="project-box">
-                <div className="project-img"></div>
+                <div className="project-img" style={{ backgroundImage: `url(${project.thumbnailPic})` }}></div>
                 <div className="project-content">
                   <div className="project-content-title-wrapper">
                     <div className="project-content-title">{project.projectTitle}</div>

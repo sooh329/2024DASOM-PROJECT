@@ -7,6 +7,31 @@ import "./Main.css"
 import { Link } from 'react-router-dom'
 import Slider from '../../components/Slider'
 
+const NMBVideoDiv = styled.div`
+  width:100vw;
+  height:100vh;
+  position: absoute;
+`;
+
+const NMBVideoTag = styled.div`
+  width:100vw;
+  height:100vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const NMBVideo = styled.video`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+`;
+
+const NMBNullBox = styled.div`
+    width: 100%;
+    height: 700px;
+`;
 
  
 
@@ -20,9 +45,7 @@ const Main = () => {
               setIsVisible(true);
           }
       };
-
       window.addEventListener('scroll', handleScroll);
-
       return () => {
           window.removeEventListener('scroll', handleScroll);
       };
@@ -30,20 +53,18 @@ const Main = () => {
 
   return (
     <Container>
-      <div className='video-wrapper'>
-        <div className='video'>
-        <iframe
-        style={{ border: '1px solid rgba(0, 0, 0, 0.1)' }}
-        width="1200"
-        height="764"
-        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F8zY28ay5FPZk0BcKI7q5Q1%2FDASOM%3Fpage-id%3D0%253A1%26node-id%3D1060-141%26scaling%3Dcontain%26starting-point-node-id%3D1060%253A716%26show-proto-sidebar%3D1%26mode%3Ddesign%26t%3D09dqcWW5YUo8f3Vd-1"
-        allowFullScreen
-        title="Figma Embed"
-        >
-        </iframe>
-        </div>
-      </div>
+      <NMBVideoDiv>
+              <NMBVideoTag>
+
+                <NMBVideo muted autoPlay>
+                  <source src={require("./Video/Dasom_1.mp4")} type="video/mp4" />
+
+                </NMBVideo>
+              </NMBVideoTag>
+            </NMBVideoDiv>
+            <NMBNullBox></NMBNullBox>
       <div className='main-title'>컴퓨터소프트웨어공학과 전공동아리 DASOM</div>
+      
       <div className='main-title-info'>
         <div className='foundation'>
           <div className='main-title-info-title'>창립연도</div>
@@ -71,7 +92,7 @@ const Main = () => {
 
       <div className='part'>
         <div className='part-title'>DASOM은 총 4개의 파트로 나뉘어져 있어요</div>
-        <Link to='/apply01' className='go-recruit'>지원하러 가기</Link>
+        <Link to='/recruit' className='go-recruit'>지원하러 가기</Link>
 
         <div className='box-container'>
           <div className="box">
@@ -130,7 +151,6 @@ const Main = () => {
         </div>
       </div>
       <div className="slider">
-        <div className="slider-title">활동 사진</div>
         <SliderWrapper >
         {/* <Slider /> */}
         </SliderWrapper>
@@ -147,8 +167,8 @@ const Main = () => {
           </div>
           <div className="main-about-box">
             <div className="main-about-img"></div>
-            <Link to="/notice">
-              <div className="main-about-link">NOTICE &gt;</div>
+            <Link to="/Makers">
+              <div className="main-about-link">Makers &gt;</div>
               </Link>
           </div>
           <div className="main-about-box">
@@ -176,7 +196,9 @@ const Container = styled.main`
   display: flex;
   flex-direction: column;
   text-align: center;
+  height:100vh
 `;
+
 const SliderWrapper = styled.div`
   position: absolute;
   top: 100%;

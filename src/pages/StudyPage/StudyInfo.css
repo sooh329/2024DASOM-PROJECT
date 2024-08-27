@@ -1,3 +1,4 @@
+@media only screen and (min-width: 768px) {
 .studyInfo-title-wrapper {
   position: relative;
   top: 232px;
@@ -42,9 +43,9 @@
 .studyInfo-image {
   position: absolute;
   width: 1200px;
-  height: 483px;
-  background-image: url("../../../public/images/study-sample.jpeg");
+  height: 800px;
   margin-top: 220px;
+  background-position: center;
 }
 
 .studyInfo-refer {
@@ -103,4 +104,5 @@ td {
 /* footer */
 .studyInfo-footer {
   margin-top: 3319px;
+}
 }

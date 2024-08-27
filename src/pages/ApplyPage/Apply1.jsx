@@ -40,8 +40,8 @@ function Apply1() {
     minute: '2-digit',
     second: '2-digit',
   });
-  const applyStart = "2024-01-08";
-  const applyEnd= "2024-01-16";
+  const applyStart = "2024-02-27";
+  const applyEnd= "2024-03-06";
   const firstAnnounce = "2024-01-17";
   const interviewStart= "2024-01-18";
   const interviewEnd = "2024-01-22";
@@ -74,7 +74,7 @@ function Apply1() {
     }
 
     try {
-      const response = await axios.post('http://dmu-dasom.or.kr:8090/recruit/32/applicants', {
+      const response = await axios.post('https://dmu-dasom.or.kr:8090/recruit/33/applicants', {
         acStudentNo,
         acName,
         acContact,
@@ -191,7 +191,7 @@ function Apply1() {
           <input class="Ap1-form-input" id="Ap1-tel"value={acContact} 
           onChange={(e) => setacContact(e.target.value)}></input>
 
-          <p class="Ap1-form-text">학교 계정 이메일 <span class="Ap1-red-text">*</span></p>
+          <p class="Ap1-form-text">이메일 <span class="Ap1-red-text">*</span></p>
           <input class="Ap1-form-input"value={acEmail} 
           onChange={(e) => setacEmail(e.target.value)}></input>
 
@@ -199,11 +199,6 @@ function Apply1() {
           <textarea id="Ap1-motivation" name="motivation" value={reasonForApply} 
           onChange={(e) => setreasonForApply(e.target.value)}></textarea>
 
-          <p class="Ap1-form-text">지원분야</p>
-          <input class="Ap1-form-input"></input>
-
-          <label for="Ap1-Dasomtalk"><p class="Ap1-form-text">다솜에게 하고 싶은 말</p></label>
-          <textarea id="Ap1-Dasomtalk" name="Dasomtalk"></textarea>
           
           <input type="submit" value="다솜 지원하기" id='Ap1-submit' onClick={handleSubmit}/>
           

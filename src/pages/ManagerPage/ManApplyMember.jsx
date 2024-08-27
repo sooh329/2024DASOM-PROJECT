@@ -4,6 +4,18 @@ import axios from 'axios';
 import './ManApplyMember.css';
 import Header from '../../components/Header';
 
+function getCookie(name) {
+        const cookieString = document.cookie;
+        const cookies = cookieString.split('; ');
+        for (let cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.split('=');
+            if (cookieName === name) {
+                return cookieValue;
+            }
+        }
+        return null;
+    }
+
 function ManApplyMember() {
   const [applyMembers, setApplyMembers] = useState([]);
   const [dates, setDates] = useState({
@@ -15,12 +27,33 @@ function ManApplyMember() {
     secondAnnounce: '',
   });
 
+  const postPass = async () => {
+    try {
+      const response = await axios.post('https://dmu-dasom.or.kr:8090/recruit/32/applicants/accept-proc');
+      if (response.data.success) {
+        console.log("합격자 인증코드 api 성공")
+        console.log(response)
+      }
+    } catch (error) {
+      console.error('Error fetching studys:', error);
+    }
+  };
+
   const [recruitMember, setRecruitMember] = useState([]);
+  const [isPassButtonClicked, setIsPassButtonClicked] = useState(false);
+  const [isFailButtonClicked, setIsFailButtonClicked] = useState(false);
 
   useEffect(() => {
     const fetchStudys = async () => {
       try {
-        const response = await axios.get('https://dmu-dasom.or.kr:8090/recruit/32/applicants');
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = getCookie('refreshToken');
+       const response = await axios.get('https://dmu-dasom.or.kr:8090/recruit/33/applicants', {
+                               headers: {
+                                   Authorization: ` ${accessToken}`,
+                                   Cookie: `${refreshToken}`
+                               }
+                           });
         if (response.data.success) {
           setRecruitMember(response.data.data);
           console.log("지원자 받기 성공")
@@ -44,7 +77,7 @@ function ManApplyMember() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dmu-dasom.or.kr:8090/32');
+        const response = await axios.get('https://dmu-dasom.or.kr:8090/33');
         setDates(response.data);
         if (response.data.success) {
           console.log('스케줄 가져오기 성공');
@@ -74,6 +107,8 @@ function ManApplyMember() {
     setCloseApplication((prevState) => !prevState);
     localStorage.setItem('closeApplication', !closeApplication);
   }
+
+
   const handleSaveClick = async () => {
     setEditable(false);
     try {
@@ -86,7 +121,7 @@ function ManApplyMember() {
         secondAnnounce,
       } = dates;
       // 서버로 선택된 날짜를 전송
-      const response = await axios.put('https://dmu-dasom.or.kr:8090/recruit/32', {
+      const response = await axios.put('https://dmu-dasom.or.kr:8090/recruit/33', {
         applyStart,
         applyEnd,
         firstAnnounce,
@@ -111,31 +146,45 @@ function ManApplyMember() {
     }));
   };
 
-  const handleButtonClick = (index, isPass) => {
+  const handleButtonClick = async (index, isPass) => {
     const updatedRecruitMember = [...recruitMember];
     updatedRecruitMember[index].acStatus = isPass ? 'pass' : 'fail';
     setRecruitMember(updatedRecruitMember);
+
+    const updatedMember = updatedRecruitMember[index];
+
     if (isPass) {
-      const passMembers = updatedRecruitMember.filter((applyMember) => applyMember.acStatus === 'pass');
-      sendPassMembersToBackend(passMembers);
+      // 합격인 경우
+      updatedMember.isAccepted = true;
+      sendMemberStatusToBackend(updatedMember);
+      setIsPassButtonClicked(true);
+    } else {
+      // 불합격인 경우
+      updatedMember.isAccepted = false;
+      sendMemberStatusToBackend(updatedMember);
+      setIsFailButtonClicked(true);
     }
   };
 
-  const sendPassMembersToBackend = async (passMembers) => {
+  const sendMemberStatusToBackend = async (updatedMember) => {
     try {
-      const response = await axios.post('https://dmu-dasom.or.kr:8090/recruit/32/applicants/accept-proc', passMembers, {
+    const accessToken = localStorage.getItem('accessToken');
+                        const refreshToken = getCookie('refreshToken');
+      const response = await axios.patch(`https://dmu-dasom.or.kr:8090/recruit/33/applicants/${updatedMember.acStudentNo}`, {
         headers: {
-          'Content-Type': 'application/json',
+            Authorization: ` ${accessToken}`,
+            Cookie: `${refreshToken}`
         },
+        isAccepted: updatedMember.isAccepted
       });
       if (response.status === 200) {
-        alert('합격자 정보를 전송하였습니다!');
+        alert(`${updatedMember.acName} 님의 상태를 업데이트하였습니다!`);
       } else {
-        alert('합격자 정보 전송에 실패하였습니다.');
+        alert('상태 업데이트에 실패하였습니다.');
       }
     } catch (error) {
       console.error('Error sending data to the server:', error);
-      console.log('합격자 전송 실패');
+      alert('상태 업데이트 중 오류가 발생하였습니다.');
     }
   };
 
@@ -161,7 +210,7 @@ function ManApplyMember() {
               value={dates.firstAnnounce}
               onChange={(value) => handleDateChange('firstAnnounce', value)}
               readOnly={!editable}
-               />
+            />
           </div>
           <div className='manAM-date-row'>
             <p>대면 면접</p>
@@ -179,7 +228,7 @@ function ManApplyMember() {
               value={dates.secondAnnounce}
               onChange={(value) => handleDateChange('secondAnnounce', value)}
               readOnly={!editable}
-               />
+            />
           </div>
         </div>
         {editable ? (
@@ -200,26 +249,47 @@ function ManApplyMember() {
             <p className='manAM-status'>상태</p>
           </div>
           <ul>
-            {recruitMember.map((recruitMember, index) => (
+            {recruitMember.map((recruit, index) => (
               <li key={index}>
-                <div className='manAM-infodepartment'>{recruitMember.acDepartment}</div>
-                <div className='manAM-infoname'>{recruitMember.acName}</div>
-                <div className='manAM-infograde'>{recruitMember.acGrade}</div>
-                <button className='true-button' onClick={() => handleButtonClick(index, true)}>합격</button>
-                <button className='false-button' onClick={() => handleButtonClick(index, false)}>불합격</button>
+                <div className='manAM-infodepartment'>{recruit.acDepartment}</div>
+                <div
+                  className={`manAM-infoname ${
+                    recruit.isAccepted ? 'green' : 'red'
+                  } ${
+                    isPassButtonClicked && recruit.isAccepted ? 'clicked' : ''
+                  } ${
+                    isFailButtonClicked && !recruit.isAccepted ? 'clicked' : ''
+                  }`}
+                >
+                  {recruit.acName}
+                </div>
+                <div className='manAM-infograde'>{recruit.acGrade}</div>
+                <button
+                  className={`true-button ${isPassButtonClicked ? 'clicked' : ''}`}
+                  onClick={() => handleButtonClick(index, true)}
+                >
+                  합격
+                </button>
+                <button
+                  className={`false-button ${isFailButtonClicked ? 'clicked' : ''}`}
+                  onClick={() => handleButtonClick(index, false)}
+                >
+                  불합격
+                </button>
               </li>
             ))}
           </ul>
         </div>
         <div className='manAM-excelPassBtn'>
           <button className='manAM-excel' onClick={handleExportExcel}>엑셀 추출</button>
+          <button className='manAM-excel' onClick={postPass}>합격자 디비에 전송</button>
         </div>
       </div>
     </div>
   );
 }
 
-const DateInput = ({ value, onChange, readOnly, editable }) => {
+const DateInput = ({ value, onChange, readOnly }) => {
   const handleChange = (e) => {
     onChange(e.target.value);
   };
@@ -230,7 +300,7 @@ const DateInput = ({ value, onChange, readOnly, editable }) => {
       value={value}
       onChange={handleChange}
       readOnly={readOnly}
-      className={editable ? 'manAM-date-customInput-editable' : 'manAM-date-customInput'}
+      className='manAM-date-customInput'
     />
   );
 };

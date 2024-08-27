@@ -101,8 +101,8 @@ function NewMember() {
 
       <NMBVideoDiv>
         <NMBVideoTag>
-          <NMBVideo muted autoPlay loop>
-            <source src={require("./Video/2024DASOM.mp4")} type="video/mp4" />
+          <NMBVideo muted autoPlay>
+            <source src={require("./Video/2024_Dasom_Apply.mp4")} type="video/mp4" />
           </NMBVideo>
         </NMBVideoTag>
       </NMBVideoDiv>
@@ -111,10 +111,11 @@ function NewMember() {
       <div id="NMB-club-join">
         <div id="NMB-text-box">
           <p id="NMB-Main-text">지원방법</p>
-
           <div id="NMB-bgstyle">
             <p class="NMB-text-title">모집기간</p>
-            <p class="NMB-sub-text">다솜에서는 1년에 한 번, 열정을 가지고 함께 동아리를 꾸려갈 부원을 모집합니다. <br></br> 동아리 부원으로 다양한 프로젝트에 참여해 자신을 발전시켜 보세요. <br></br>학교 주변 맛집부터 시험 꿀팁까지! 선배와 동기들이 무엇이든 알려드립니다.</p>
+            <p class="NMB-sub-text">- 서류 모집: 2024.02.27 ~ 2024.03.06 <br></br> - 추가 서류 모집: 2024.03.06 ~ 2024.03.10 <br></br> - 서류 발표: 2024.03.08 - 추가 모집 서류 발표: 2024.03.10
+            <br></br>- 대면 면접: 2024.03.11 ~ 2024.03.13
+            <br></br>- 최종 발표: 2024.03.15</p>
           </div>
 
           <div class="NMB-big-box">
@@ -126,7 +127,7 @@ function NewMember() {
             </div>
             <div class="NMB-small-box">
               <p class="NMB-text-title">지원 방법</p>
-              <p class="NMB-sub-text">1차 서류 - 신입부원 모집 지원서 작성<br></br> <br></br>2차 면접 - 대면 면접 이후 최종 합격</p>
+              <p class="NMB-sub-text">다솜 홈페이지 recruit 접속 후 지원서 작성</p>
             </div>
           </div>
         </div>
@@ -140,12 +141,14 @@ function NewMember() {
             <div class="NMB-align-box">
               <NMBNullBox2></NMBNullBox2>
               <NMBLeftBox>
-                <p class="NMB-text-titles">서류접수</p>
-                <p class="NMB-sub-texts">2023.09.25(월) <br></br>~ 10.01(일) 23 : 59</p>
+                <p class="NMB-text-titles">서류 모집</p>
+                <p class="NMB-sub-texts">2024.02.27(화) <br></br>~ 03.06(수)</p>
+                <p class="NMB-text-titles">추가 서류 모집</p>
+                <p class="NMB-sub-texts">2024.03.06(수) <br></br>~ 03.10(일)</p>
               </NMBLeftBox>
               <NMBLeftBox>
-                <p class="NMB-text-titles">대면면접</p>
-                <p class="NMB-sub-texts">2023.09.25(월) <br></br>~ 10.01(일) 23 : 59</p>
+                <p class="NMB-text-titles">대면 면접</p>
+                <p class="NMB-sub-texts">2024.03.11(월) <br></br>~ 03.13(수)</p>
               </NMBLeftBox>
             </div>
             <div class="NMB-align-box">
@@ -154,23 +157,23 @@ function NewMember() {
             <div class="NMB-align-box">
               <NMBNullBox3></NMBNullBox3>
               <NMBRightBox>
-                <p class="NMB-text-titles">서류 결과 발표</p>
-                <p class="NMB-sub-texts">2023.09.25(월) <br></br>~ 10.01(일) 23 : 59</p>
+                <p class="NMB-text-titles">서류 발표</p>
+                <p class="NMB-sub-texts">2024.03.08(금)</p>
+                <p class="NMB-text-titles">추가 서류 발표</p>
+                <p class="NMB-sub-texts">2024.03.10(일)</p>
                 </NMBRightBox>
               <NMBNullBox2>
-              <p class="NMB-text-titles">서류 결과 발표</p>
-                <p class="NMB-sub-texts">2023.09.25(월) <br></br>~ 10.01(일) 23 : 59</p>
+              <p class="NMB-text-titles">최종 발표</p>
+                <p class="NMB-sub-texts">2024.03.15(금)</p>
               </NMBNullBox2>
             </div>
           </div>
           <div id="NMB-center-button">
-          {isApplicationOpen ? (
-            <Link to="../apply01" className="NMB-linkButton">
-              지원하러 가기
-            </Link>
-          ) : (
-            <span id='NMB-center-button-closed'>지원 기간이 아닙니다</span>
-          )}
+
+            <Link  className="NMB-linkButton">
+                          지금은 지원기간이 아닙니다
+                        </Link>
+
           </div>
       </div>
 

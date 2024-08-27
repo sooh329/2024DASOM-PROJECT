@@ -1,3 +1,4 @@
+@media only screen and (min-width: 900px) {
 .project-title {
   position: relative;
   top: 248px;
@@ -35,11 +36,11 @@
 
 .project-img {
   position: inherit;
-  background-image: url("../../../public/images/study-sample.jpeg");
   width: 539.695px;
   height: 204.007px;
   border-radius: 16px;
   margin-right: 10px;
+   background-position: center;
 }
 .project-content {
   position: inherit;
@@ -118,4 +119,6 @@
 
 .project-footer {
   margin-top: 1890px;
+}
+
 }
